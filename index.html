@@ -1,0 +1,307 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Buku Lalu Lintas Steril Area Pintu III</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body class="bg-gray-100 font-sans text-gray-800">
+
+  <!-- Header / Navbar -->
+  <header class="bg-blue-900 text-white shadow-lg">
+    <div class="max-w-7xl mx-auto px-4 py-4 flex flex-col md:flex-row justify-between items-center">
+      <div class="flex items-center space-x-3">
+        <div class="p-2 bg-blue-800 rounded-lg">
+          <i class="fa-solid me-2 fa-shield-halved text-2xl text-yellow-400"></i>
+        </div>
+        <div>
+          <h1 class="text-xl font-bold tracking-wide">REGISTER LALU LINTAS PINTU III</h1>
+          <p class="text-xs text-blue-200">Pengawasan Steril Area</p>
+        </div>
+      </div>
+      <div class="mt-2 md:mt-0 text-right">
+        <span id="liveClock" class="text-lg font-mono font-semibold bg-blue-950 px-3 py-1 rounded border border-blue-700">00:00:00</span>
+      </div>
+    </div>
+  </header>
+
+  <!-- Container Utama -->
+  <main class="max-w-7xl mx-auto px-4 py-6">
+
+    <!-- Stat Cards Summary -->
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
+      <div class="bg-amber-500 text-white p-5 rounded-xl shadow flex items-center justify-between">
+        <div>
+          <p class="text-sm font-medium opacity-90">Sedang di Steril Area</p>
+          <h2 id="statAktif" class="text-3xl font-extrabold mt-1">0</h2>
+        </div>
+        <i class="fa-solid fa-hospital-user text-4xl opacity-50"></i>
+      </div>
+      <div class="bg-emerald-600 text-white p-5 rounded-xl shadow flex items-center justify-between">
+        <div>
+          <p class="text-sm font-medium opacity-90">Total Selesai / Kembali</p>
+          <h2 id="statSelesai" class="text-3xl font-extrabold mt-1">0</h2>
+        </div>
+        <i class="fa-solid fa-circle-check text-4xl opacity-50"></i>
+      </div>
+      <div class="bg-blue-800 text-white p-5 rounded-xl shadow flex items-center justify-between">
+        <div>
+          <p class="text-sm font-medium opacity-90">Total Pergerakan Hari Ini</p>
+          <h2 id="statTotal" class="text-3xl font-extrabold mt-1">0</h2>
+        </div>
+        <i class="fa-solid fa-clipboard-list text-4xl opacity-50"></i>
+      </div>
+    </div>
+
+    <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+
+      <!-- Form Input WBP Keluar -->
+      <div class="lg:col-span-1 bg-white p-6 rounded-xl shadow-md border border-gray-200 h-fit">
+        <h3 class="text-lg font-bold text-gray-800 border-b pb-2 mb-4 flex items-center">
+          <i class="fa-solid fa-user-plus text-blue-600 mr-2"></i> Input WBP Keluar
+        </h3>
+        
+        <form id="formKeluar" onsubmit="handleTambahWbp(event)" class="space-y-4">
+          <div>
+            <label class="block text-xs font-semibold text-gray-600 uppercase mb-1">Nama WB</label>
+            <input type="text" id="namaWbp" required placeholder="Masukkan Nama WB" class="w-full px-3 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500 focus:outline-none text-sm">
+          </div>
+
+          <div>
+            <label class="block text-xs font-semibold text-gray-600 uppercase mb-1">Kamar / Blok Asal</label>
+            <input type="text" id="kamar" required placeholder="Contoh: Kamar 1 Tahanan" class="w-full px-3 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500 focus:outline-none text-sm">
+          </div>
+
+          <div>
+            <label class="block text-xs font-semibold text-gray-600 uppercase mb-1">Tujuan</label>
+            <select id="tujuan" class="w-full px-3 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500 focus:outline-none text-sm">
+              <option value="Klinik (Berobat / Pengobatan)">Klinik (Berobat / Pengobatan)</option>
+              <option value="Klinik (Pemeriksaan Rutin)">Klinik (Pemeriksaan Rutin)</option>
+              <option value="Tamping Kebun">Tamping Kebun</option>
+              <option value="Kurvey Luar">Kurvey Luar</option>
+              <option value="Tamping">Tamping</option>
+              <option value="Steril Area (Lainnya)">Steril Area (Lainnya)</option>
+            </select>
+          </div>
+
+          <div>
+            <label class="block text-xs font-semibold text-gray-600 uppercase mb-1">Petugas Pengawal</label>
+            <input type="text" id="pengawal" placeholder="Nama Petugas Pengawal Blok" class="w-full px-3 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500 focus:outline-none text-sm">
+          </div>
+
+          <!-- Kolom Baru: Kepala Regu Pengamanan -->
+          <div>
+            <label class="block text-xs font-semibold text-gray-600 uppercase mb-1">Kepala Regu Pengamanan (Karupam)</label>
+            <input type="text" id="karupam" required placeholder="Nama Karupam yang Bertugas" class="w-full px-3 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500 focus:outline-none text-sm">
+          </div>
+
+          <div>
+            <label class="block text-xs font-semibold text-gray-600 uppercase mb-1">Petugas Pintu III</label>
+            <input type="text" id="petugasPintu" required placeholder="Nama Petugas Piket Pintu III" class="w-full px-3 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500 focus:outline-none text-sm">
+          </div>
+
+          <button type="submit" id="btnSubmit" class="w-full bg-blue-900 hover:bg-blue-800 text-white font-semibold py-2.5 rounded-lg shadow transition flex justify-center items-center">
+            <i class="fa-solid fa-right-to-bracket mr-2"></i> Catat WBP Masuk Steril
+          </button>
+        </form>
+      </div>
+
+      <!-- Tabel Pemantauan Real-Time -->
+      <div class="lg:col-span-2 space-y-6">
+        
+        <!-- Table 1: Aktif di Steril Area -->
+        <div class="bg-white p-6 rounded-xl shadow-md border border-amber-200">
+          <div class="flex justify-between items-center border-b pb-3 mb-4">
+            <h3 class="text-lg font-bold text-amber-800 flex items-center">
+              <span class="relative flex h-3 w-3 mr-2">
+                <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-amber-400 opacity-75"></span>
+                <span class="relative inline-flex rounded-full h-3 w-3 bg-amber-500"></span>
+              </span>
+              WBP Sedang Berada di Steril Area
+            </h3>
+            <button onclick="loadData()" class="text-xs bg-gray-100 hover:bg-gray-200 text-gray-700 px-3 py-1 rounded border">
+              <i class="fa-solid fa-rotate mr-1"></i> Refresh
+            </button>
+          </div>
+
+          <div class="overflow-x-auto">
+            <table class="w-full text-left text-sm">
+              <thead class="bg-amber-50 text-amber-900 font-semibold border-b border-amber-200">
+                <tr>
+                  <th class="p-3">Waktu Keluar</th>
+                  <th class="p-3">Nama WBP</th>
+                  <th class="p-3">Kamar / Blok</th>
+                  <th class="p-3">Pengawal / Karupam</th>
+                  <th class="p-3 text-center">Aksi</th>
+                </tr>
+              </thead>
+              <tbody id="tableAktif" class="divide-y divide-gray-100">
+                <tr>
+                  <td colspan="5" class="p-4 text-center text-gray-400">Memuat data...</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+        <!-- Table 2: Riwayat Hari Ini -->
+        <div class="bg-white p-6 rounded-xl shadow-md border border-gray-200">
+          <h3 class="text-md font-bold text-gray-700 border-b pb-3 mb-4 flex items-center">
+            <i class="fa-solid fa-clock-rotate-left text-gray-500 mr-2"></i> Riwayat Selesai Hari Ini
+          </h3>
+          <div class="overflow-x-auto">
+            <table class="w-full text-left text-xs">
+              <thead class="bg-gray-50 text-gray-600 font-semibold border-b">
+                <tr>
+                  <th class="p-2">Nama WBP</th>
+                  <th class="p-2">Tujuan</th>
+                  <th class="p-2">Jam Keluar</th>
+                  <th class="p-2">Jam Kembali</th>
+                  <th class="p-2">Status</th>
+                </tr>
+              </thead>
+              <tbody id="tableRiwayat" class="divide-y divide-gray-100">
+                <!-- Row data -->
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+      </div>
+
+    </div>
+  </main>
+
+  <script>
+    // MASUKKAN URL GOOGLE APPS SCRIPT ANDA DI SINI:
+    const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbyYcRGgOd-QLTCKqcLGOgkb1ujS_t-wgp6oOcq2sBI_tXPaTt6zNYONiBP_aKYwTb8/exec";
+
+    function updateClock() {
+      const now = new Date();
+      document.getElementById('liveClock').innerText = now.toLocaleTimeString('id-ID');
+    }
+    setInterval(updateClock, 1000);
+    updateClock();
+
+    let localData = [];
+
+    async function loadData() {
+      if (SCRIPT_URL.includes("GANTI_DENGAN")) return;
+      try {
+        const res = await fetch(SCRIPT_URL);
+        localData = await res.json();
+        renderTables();
+      } catch (e) {
+        console.error("Gagal memuat data", e);
+      }
+    }
+
+    function renderTables() {
+      const activeRows = localData.filter(d => d.status === "DI STERIL AREA");
+      const doneRows = localData.filter(d => d.status === "KEMBALI");
+
+      document.getElementById('statAktif').innerText = activeRows.length;
+      document.getElementById('statSelesai').innerText = doneRows.length;
+      document.getElementById('statTotal').innerText = localData.length;
+
+      // Table Aktif
+      const tableAktif = document.getElementById('tableAktif');
+      if (activeRows.length === 0) {
+        tableAktif.innerHTML = `<tr><td colspan="5" class="p-4 text-center text-gray-400 italic">Tidak ada WBP di Steril Area saat ini</td></tr>`;
+      } else {
+        tableAktif.innerHTML = activeRows.map(item => `
+          <tr class="hover:bg-amber-50/50">
+            <td class="p-3 font-semibold text-amber-900">${item.jamKeluar}</td>
+            <td class="p-3 font-bold text-gray-800">${item.namaWbp}</td>
+            <td class="p-3 text-gray-600">${item.kamar}</td>
+            <td class="p-3 text-gray-600">
+              <span class="block text-xs">Pengawal: <b>${item.pengawal || '-'}</b></span>
+              <span class="block text-[11px] text-blue-800">Karupam: <b>${item.karupam || '-'}</b></span>
+            </td>
+            <td class="p-3 text-center">
+              <button onclick="handleKembali('${item.id}')" class="bg-emerald-600 hover:bg-emerald-700 text-white text-xs px-3 py-1.5 rounded-lg shadow font-medium">
+                <i class="fa-solid fa-arrow-left-long mr-1"></i> Kembali ke Blok
+              </button>
+            </td>
+          </tr>
+        `).join('');
+      }
+
+      // Table Riwayat
+      const tableRiwayat = document.getElementById('tableRiwayat');
+      tableRiwayat.innerHTML = doneRows.slice(-5).reverse().map(item => `
+        <tr class="hover:bg-gray-50">
+          <td class="p-2 font-medium">${item.namaWbp}</td>
+          <td class="p-2 text-gray-500">${item.tujuan}</td>
+          <td class="p-2">${item.jamKeluar}</td>
+          <td class="p-2 font-semibold text-emerald-700">${item.jamKembali}</td>
+          <td class="p-2"><span class="bg-emerald-100 text-emerald-800 px-2 py-0.5 rounded text-[10px] font-bold">KEMBALI</span></td>
+        </tr>
+      `).join('');
+    }
+
+    async function handleTambahWbp(e) {
+      e.preventDefault();
+      const btn = document.getElementById('btnSubmit');
+      btn.disabled = true;
+      btn.innerText = "Menyimpan...";
+
+      const now = new Date();
+      const data = {
+        action: "KELUAR_KE_STERIL",
+        tanggal: now.toLocaleDateString('id-ID'),
+        jamKeluar: now.toLocaleTimeString('id-ID'),
+        namaWbp: document.getElementById('namaWbp').value,
+        kamar: document.getElementById('kamar').value,
+        tujuan: document.getElementById('tujuan').value,
+        pengawal: document.getElementById('pengawal').value,
+        karupam: document.getElementById('karupam').value,
+        petugasPintu: document.getElementById('petugasPintu').value
+      };
+
+      try {
+        await fetch(SCRIPT_URL, {
+          method: "POST",
+          body: JSON.stringify(data)
+        });
+        document.getElementById('namaWbp').value = "";
+        document.getElementById('kamar').value = "";
+        document.getElementById('pengawal').value = "";
+        document.getElementById('karupam').value = "";
+        loadData();
+      } catch (err) {
+        alert("Gagal menyimpan data!");
+      } finally {
+        btn.disabled = false;
+        btn.innerHTML = `<i class="fa-solid fa-right-to-bracket mr-2"></i> Catat WBP Masuk Steril`;
+      }
+    }
+
+    async function handleKembali(id) {
+      if(!confirm("Konfirmasi WBP sudah kembali ke blok?")) return;
+      
+      const now = new Date();
+      const data = {
+        action: "KEMBALI_KE_BLOK",
+        id: id,
+        jamKembali: now.toLocaleTimeString('id-ID')
+      };
+
+      try {
+        await fetch(SCRIPT_URL, {
+          method: "POST",
+          body: JSON.stringify(data)
+        });
+        loadData();
+      } catch (err) {
+        alert("Gagal memperbarui status!");
+      }
+    }
+
+    // Auto load data saat halaman dibuka
+    loadData();
+  </script>
+</body>
+</html>
